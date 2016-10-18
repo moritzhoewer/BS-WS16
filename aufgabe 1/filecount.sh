@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 # Counting files
 # Authors: Moritz Höwer, Jesko Treffler
 # Date: 15.10.15
@@ -31,11 +31,11 @@ EOF
 if [ $# -lt 1 ]; then
 	count=$(ls -l | grep ^- | wc -l)
 	echo "There are $count files in this directory"
-else	
+else
 	# parse arguments
 	for arg in "$@"
 	do
-		case $arg in 
+		case $arg in
 		"-h" | "--help")
 			showHelp=1
 		;;
@@ -57,56 +57,83 @@ else
 		"-v" | "--verbose")
 			showVerbose=1
 		;;
-		*)
-			echo "Invalid Option $arg" 
+		"-e" | "--echo")
+			echoFiles=1
+		;;
+		"--version")
+			echo Version 1.0
+			exit 0;
+		;;
+		-*)
+			echo "Invalid Option $arg"
 			usage
 			exit -1
+                ;;
+		*)
+			directory=$arg
 		esac
 	done
-	
+
 	# show help if flag was set
 	if [ $showHelp ]; then
 		usage
 		exit 0
 	fi
-	
+
 	# assemble command
 	cmd="ls -l"
-	
+
 	# whether or not to show hidden files
 	if [ $showHidden ]; then
 	 cmd+="a"
 	fi
-	
+	cmd+=" $directory"
+
 	# continue with egrep
 	cmd+=" | egrep \""
-	
+
 	# assemble the pattern for egrep starting with somehting that is
 	# always false to make the following if statements easier
 	egrepPattern="^k"
-	
+
 	# should files be counted
 	if [ $countFiles ]; then
 	 egrepPattern+="|^-"
 	fi
 	
-	# missing the others
+	#should directories be counted
+	if [ $countDirs ]; then
+	 egrepPattern+="|^d"
+	fi
+
+	#should devices be counted
+	if [ $countDevices ]; then
+	 egrepPattern+="|^c|^b"
+	fi
 	
-	# finish egrep
+	#should links be counted
+	if [ $countLinks ]; then
+	 egrepPattern+="|^l"
+	fi
+
+	#finish egrep
 	cmd+="$egrepPattern\""
 
 	# continue with wordcount
-	# MISSING tee / print options here!!
-	cmd+=" | wc -l"
-	
+	if [ $echoFiles ]; then
+	 cmd+=" | tee >(wc -l) "
+	else
+	 cmd+=" | wc -l"
+	fi
+
 	# show command if verbose is on
 	if [ $showVerbose ]; then
 		echo "$cmd"
 	fi
-	
+
 	# execute comand and display result
-	count=$(eval $cmd)
-	echo "There are $count in directory"
+	eval $cmd
+	#echo "There are $count in directory"
 fi
 
 exit 0
