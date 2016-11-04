@@ -1,0 +1,4 @@
+main.o: main.c philosopher.h output.h gym.h errors.h
+output.o: output.c output.h
+gym.o: gym.c gym.h errors.h
+philosopher.o: philosopher.c philosopher.h
