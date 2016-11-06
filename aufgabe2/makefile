@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -g -Wall -pthread
 LDFLAGS = -g -lpthread
 
-SRC = main.c output.c gym.c philosopher.c
+SRC = main.c gym.c philosophers.c
 OBJ = $(SRC:%.c=%.o)
 
 all: philosophen_training

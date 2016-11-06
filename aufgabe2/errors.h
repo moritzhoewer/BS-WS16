@@ -12,7 +12,6 @@
 #ifndef ERRORS_H_
 #define ERRORS_H_
 
-#define E_MUTEX_ERROR - 1
-#define E_NO_WEIGHTS -2
+#define E_NO_SUCH_PHILOSOPHER - 1
 
 #endif /* ERRORS_H_ */

@@ -14,13 +14,14 @@
 #define GYM_WEIGHTS_AVAILIABLE_SIZE 3
 
 /**
- * @brief Initializes the Gym
- *
- * @return error code
- * @retval 0             no error
- * @retval E_MUTEX_ERROR initialization of mutex failed
+ * @brief Read-Only variable containing the total amounts of weights in the gym
  */
-int gym_init();
+extern const int gym_weights_availiable[];
+
+/**
+ * @brief Initializes the Gym
+ */
+void gym_init();
 
 /**
  * @brief [MONITOR METHOD] Hands out weights to the caller.
@@ -32,18 +33,14 @@ int gym_init();
  *
  * @param[in] total          the desired total weight
  * @param[out] weight_counts will contain the weights if method returned 0
- * @return error code
- * @retval 0 no error
  */
-int gym_get_weights(int total, int weight_counts[]);
+void gym_get_weights(int total, int weight_counts[]);
 
 /**
  * @brief [MONITOR METHOD] Returns weights from the caller to the gym.
  *
  * @param[in] weight_counts array with weights to return
- * @return error code
- * @retval 0 no error
  */
-int gym_return_weights(int weight_counts[]);
+void gym_return_weights(int weight_counts[]);
 
 #endif /* GYM_H_ */

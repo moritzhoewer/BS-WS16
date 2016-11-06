@@ -10,11 +10,37 @@
 
 #include <pthread.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "gym.h"
+#include "philosophers.h"
 #include "errors.h"
 
+/**
+ * @brief Mutex used to guard Monitor methods
+ */
 static pthread_mutex_t mtx;
-static int weights_availiable[GYM_WEIGHTS_AVAILIABLE_SIZE] = { 4, 4, 5 };
+
+/**
+ * @brief Condition variable
+ */
+static pthread_cond_t no_weights;
+
+/**
+ * @brief Array used to store how many of the different kinds of weights are
+ *        available
+ */
+const int gym_weights_availiable[GYM_WEIGHTS_AVAILIABLE_SIZE] = { 4, 4, 5 };
+
+/**
+ * @brief Array used to store how many of the different kinds of weights are
+ *        available
+ */
+static int weights_availiable[GYM_WEIGHTS_AVAILIABLE_SIZE];
+
+/**
+ * @brief The mass of the different kinds of weights
+ */
 static int weight_masses[GYM_WEIGHTS_AVAILIABLE_SIZE] = { 2, 3, 5 };
 
 /**
@@ -37,7 +63,8 @@ static bool is_combination_possible(int total, int weight_counts[],
         return true;
     }
 
-    if (total < weight_masses[current_index] || weights_availiable[current_index] == 0) {
+    if (total < weight_masses[current_index]
+            || weights_availiable[current_index] == 0) {
         return is_combination_possible(total, weight_counts, current_index - 1);
     } else {
         // "transfer" 1 weight from gym to philosopher
@@ -63,11 +90,21 @@ static bool is_combination_possible(int total, int weight_counts[],
 /*
  * Initializes the Gym
  */
-int gym_init() {
-    if (pthread_mutex_init(&mtx, NULL) != 0) {
-        return E_MUTEX_ERROR;
+void gym_init() {
+    // init weight counts
+    for(int i = 0; i < GYM_WEIGHTS_AVAILIABLE_SIZE; i++){
+        weights_availiable[i] = gym_weights_availiable[i];
     }
-    return 0;
+
+    // init monitor
+    if (pthread_mutex_init(&mtx, NULL)) {
+        perror("[gym_init] Failed to create Mutex");
+        exit(EXIT_FAILURE);
+    }
+    if (pthread_cond_init(&no_weights, NULL)) {
+        perror("[gym_init] Failed to create condition variable");
+        exit(EXIT_FAILURE);
+    }
 }
 
 /*
@@ -78,31 +115,45 @@ int gym_init() {
  * will be handed out (signaled by a return value of 0). If not, an error code
  * is returned
  */
-int gym_get_weights(int total, int weight_counts[]) {
-    if (pthread_mutex_lock(&mtx) != 0) {
-        return E_MUTEX_ERROR;
+void gym_get_weights(int total, int weight_counts[]) {
+    if (pthread_mutex_lock(&mtx)) {
+        perror("[gym_get_weights] Failed to lock mutex");
+        exit(EXIT_FAILURE);
     }
-    int result = E_NO_WEIGHTS;
-    if (is_combination_possible(total, weight_counts,
-            GYM_WEIGHTS_AVAILIABLE_SIZE - 1)) {
-        result = 0;
+
+    philosophers_display_status(weights_availiable);
+
+    while (!is_combination_possible(total, weight_counts,
+    GYM_WEIGHTS_AVAILIABLE_SIZE - 1)) {
+        if (pthread_cond_wait(&no_weights, &mtx)) {
+            perror("[gym_get_weights] Wait on condition variable failed");
+            exit(EXIT_FAILURE);
+        }
     }
+
+    philosophers_display_status(weights_availiable);
+
     pthread_mutex_unlock(&mtx);
-    return result;
 }
 
 /*
  * [MONITOR METHOD] Returns weights from the caller to the gym.
  */
-int gym_return_weights(int weight_counts[]) {
-    if (pthread_mutex_lock(&mtx) != 0) {
-        return E_MUTEX_ERROR;
+void gym_return_weights(int weight_counts[]) {
+    if (pthread_mutex_lock(&mtx)) {
+        perror("[gym_return_weights] Failed to lock mutex");
+        exit(EXIT_FAILURE);
     }
-    for(int i = 0; i < GYM_WEIGHTS_AVAILIABLE_SIZE; i++){
+
+    for (int i = 0; i < GYM_WEIGHTS_AVAILIABLE_SIZE; i++) {
         // "transfer" weights to gym
         weights_availiable[i] += weight_counts[i];
         weight_counts[i] = 0;
     }
+
+    philosophers_display_status(weights_availiable);
+
+    // notify threads who might be blocking on the condition
+    pthread_cond_broadcast(&no_weights);
     pthread_mutex_unlock(&mtx);
-    return 0;
 }

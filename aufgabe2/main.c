@@ -9,12 +9,14 @@
  */
 #include <stdio.h>
 #include <stdbool.h>
-#include "philosopher.h"
-#include "output.h"
 #include "gym.h"
 #include "errors.h"
+#include "philosophers.h"
 
-void test_is_combination_possible() {
+/**
+ * @brief No longer works, because of condition variable
+ */
+/*void test_is_combination_possible() {
     // take out some weights
     int my_weights[GYM_WEIGHTS_AVAILIABLE_SIZE] = { 0 };
     //gym_get_weights(25, my_weights);
@@ -40,16 +42,12 @@ void test_is_combination_possible() {
     }
 
     gym_return_weights(my_weights);
-}
+}*/
 
 int main(void) {
-    if (gym_init()) {
-        printf("Error with Gym!\n");
-        return -1;
-    }
-
-    test_is_combination_possible();
-
+    gym_init();
+    philosophers_init();
+    philosophers_quit();
     return 0;
 }
 
