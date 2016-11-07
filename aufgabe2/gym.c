@@ -26,8 +26,8 @@ static pthread_mutex_t mtx;
  */
 static pthread_cond_t no_weights;
 
-/**
- * @brief Array used to store how many of the different kinds of weights are
+/*
+ * Array used to store how many of the different kinds of weights are
  *        available
  */
 const int gym_weights_availiable[GYM_WEIGHTS_AVAILIABLE_SIZE] = { 4, 4, 5 };
@@ -50,7 +50,7 @@ static int weight_masses[GYM_WEIGHTS_AVAILIABLE_SIZE] = { 2, 3, 5 };
  * weights_availiable
  *
  * @param[in]  total         the total weight requested
- * @param[out] weights       will contain weights if message returns true
+ * @param[out] weight_counts will contain weights if message returns true
  * @param[in]  current_index the current index to search for weights
  * @return true, if total can be achieved
  */
