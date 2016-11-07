@@ -3,8 +3,8 @@
  * @author  Moritz Hoewer (Moritz.Hoewer@haw-hamburg.de)
  * @author  Jesko Treffler (Jesko.Treffler@haw-hamburg.de)
  * @version 1.0
- * @date    30.10.2016
- * @brief   Implementation of the Philosopher Module
+ * @date    07.11.2016
+ * @brief   Implementation of the Philosophers Module
  ******************************************************************
  */
 #include <stdlib.h>

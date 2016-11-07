@@ -3,7 +3,7 @@
  * @author  Moritz Hoewer (Moritz.Hoewer@haw-hamburg.de)
  * @author  Jesko Treffler (Jesko.Treffler@haw-hamburg.de)
  * @version 1.0
- * @date    30.10.2016
+ * @date    07.11.2016
  * @brief   Collection of all the Error codes for the Program
  ******************************************************************
  */
