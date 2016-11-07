@@ -1,5 +1,5 @@
 CC = gcc
-CCFLAGS = -g -Wall -pthread
+CFLAGS = -g -Wall -pthread
 LDFLAGS = -g -lpthread
 
 all: critsect02

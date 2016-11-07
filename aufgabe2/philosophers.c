@@ -83,14 +83,14 @@ typedef struct {
  *
  * @param attributes the id of the philosopher (PhiloAttributes)
  */
-void* philo_loop(void *attributes);
+static void* philo_loop(void *attributes);
 
 /**
  * @brief Creates a new philosopher thread and initializes it
  *
  * @param philo_id  the id of the philosopher
  */
-void create_philothread(int philo_id);
+static void create_philothread(int philo_id);
 
 /**
  * @brief Barrier, to make sure threads get initialized properly
@@ -243,7 +243,7 @@ int philosopher_proceed(int philo_id) {
 /*
  * Creates a new philosopher thread and initializes it
  */
-void create_philothread(int philo_id) {
+static void create_philothread(int philo_id) {
     // initialize
     philos[philo_id].command = NORMAL_EXECUTION;
     philos[philo_id].state = UNDEFINED;
@@ -273,7 +273,7 @@ void create_philothread(int philo_id) {
 /*
  * Loop for the philosopher threads
  */
-void* philo_loop(void *attributes) {
+static void* philo_loop(void *attributes) {
     // get attributes and store them in local variables
     PhiloAttributes *attr = (PhiloAttributes*) attributes;
     int id = attr->id;
