@@ -16,25 +16,6 @@
 #include "errors.h"
 #include "gym.h"
 
-/**
- * @brief How many Philosophers will be created
- */
-#define PHILOSOPHERS_COUNT 5
-
-/**
- * @brief Threshold for the barrier
- */
-#define BARRIER_THRESHOLD 2
-
-/**
- * @brief Counter for the Rest Loop
- */
-#define REST_LOOP 1000000000
-
-/**
- * @brief Counter for Workout Loop
- */
-#define WORKOUT_LOOP 500000000
 
 /**
  * @brief Enum for the possible states of a philosopher
@@ -54,8 +35,8 @@ static const char philo_state_names[] = { 'G', 'W', 'P', 'R', 'U' };
 typedef enum {
     NORMAL_EXECUTION, //!< no special command, just do what you are supposed to
     BLOCK,            //!< thread should block
-    PROCEED,          //!< thrwead should proceed to the end of the loop
-    QUIT,             //!< thread should finish and end itself
+    PROCEED,          //!< thread should proceed to the end of the loop
+    QUIT             //!< thread should finish and end itself
 } PhiloCommand;
 static const char philo_command_names[] = { 'n', 'b', 'p', 'q' };
 
@@ -67,7 +48,7 @@ typedef struct {
     PhiloState state;
     pthread_t id;
     sem_t block_semaphore;
-    int *weights;
+    int weights[GYM_WEIGHTS_AVAILIABLE_SIZE];
 } Philosopher;
 
 /**
@@ -93,9 +74,14 @@ static void* philo_loop(void *attributes);
 static void create_philothread(int philo_id);
 
 /**
- * @brief Barrier, to make sure threads get initialized properly
+ * @brief Barrier, to make sure threads get their arguments properly
  */
-static pthread_barrier_t barrier;
+static pthread_barrier_t arg_barrier;
+
+/**
+ * @brief Barrier, to make sure all threads get initialized
+ */
+static pthread_barrier_t init_barrier;
 
 /**
  * @brief Array to manage all Threads
@@ -105,7 +91,7 @@ static Philosopher philos[PHILOSOPHERS_COUNT];
 /**
  * @brief Array that contains the training weights for each philosopher
  */
-static const int training_weights[PHILOSOPHERS_COUNT] = { 6, 8, 12, 12, 14 };
+static const int training_weights[PHILOSOPHERS_COUNT] = { PHILOSOPHERS_WEIGHTS };
 
 /*
  * Displays the current status on the screen
@@ -118,19 +104,16 @@ void philosophers_display_status(const int gym_weights[]) {
 
     // print information for each philosopher
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++) {
-        if (philos[i].weights != NULL) {
-            printf("%d(%d)%c:%c:[%d, %d, %d] ", i, training_weights[i],
-                    philo_command_names[philos[i].command],
-                    philo_state_names[philos[i].state], philos[i].weights[0],
-                    philos[i].weights[1], philos[i].weights[2]);
-
-            // accumulate
-            weight_acum[0] += philos[i].weights[0];
-            weight_acum[1] += philos[i].weights[1];
-            weight_acum[2] += philos[i].weights[2];
-        } else {
-            printf("%d(%d)  UNDEFINED   ", i, training_weights[i]);
-        }
+		printf("%d(%d)%c:%c:[%d, %d, %d] ", i, training_weights[i],
+			philo_command_names[philos[i].command],
+			philo_state_names[philos[i].state], philos[i].weights[0],
+			philos[i].weights[1], philos[i].weights[2]);
+			
+		// accumulate
+		weight_acum[0] += philos[i].weights[0];
+		weight_acum[1] += philos[i].weights[1];
+		weight_acum[2] += philos[i].weights[2];
+   
     }
 
     // print information about gym
@@ -154,9 +137,16 @@ void philosophers_display_status(const int gym_weights[]) {
  * Initializes the philosophers
  */
 void philosophers_init() {
-    // Initialize Barrier
-    if (pthread_barrier_init(&barrier, NULL, BARRIER_THRESHOLD)) {
-        perror("[philosophers_init] Failed to create barrier");
+    // Initialize arg_barrier
+    if (pthread_barrier_init(&arg_barrier, NULL, BARRIER_THRESHOLD)) {
+        perror("[philosophers_init] Failed to create arg_barrier");
+        exit(EXIT_FAILURE);
+    }
+    
+    // Initialize init_barrier
+    // threshold is PHILOSOPHERS_COUNT + 1 because of main thread
+    if (pthread_barrier_init(&init_barrier, NULL, PHILOSOPHERS_COUNT + 1)) {
+        perror("[philosophers_init] Failed to create init_barrier");
         exit(EXIT_FAILURE);
     }
 
@@ -164,9 +154,13 @@ void philosophers_init() {
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++) {
         create_philothread(i);
     }
+    
+    // Wait for initialization of all threads
+    pthread_barrier_wait(&init_barrier);
 
-    // Cleanup barrier
-    pthread_barrier_destroy(&barrier);
+    // Cleanup barriers
+    pthread_barrier_destroy(&arg_barrier);
+    pthread_barrier_destroy(&init_barrier);
 }
 
 /*
@@ -211,7 +205,7 @@ int philosophers_block(int philo_id) {
 /*
  * Unblocks the specified philosopher
  */
-int philosopher_unblock(int philo_id) {
+int philosophers_unblock(int philo_id) {
     if (philo_id < 0 || philo_id >= PHILOSOPHERS_COUNT) {
         return E_NO_SUCH_PHILOSOPHER;
     }
@@ -229,7 +223,7 @@ int philosopher_unblock(int philo_id) {
 /*
  * Proceeds the specified philosopher behind the current loop
  */
-int philosopher_proceed(int philo_id) {
+int philosophers_proceed(int philo_id) {
     if (philo_id < 0 || philo_id >= PHILOSOPHERS_COUNT) {
         return E_NO_SUCH_PHILOSOPHER;
     }
@@ -247,7 +241,10 @@ static void create_philothread(int philo_id) {
     // initialize
     philos[philo_id].command = NORMAL_EXECUTION;
     philos[philo_id].state = UNDEFINED;
-    philos[philo_id].weights = NULL;
+    
+    for(int i = 0; i < GYM_WEIGHTS_AVAILIABLE_SIZE; i++){
+		philos[philo_id].weights[i] = 0;
+	}
 
     // initialize condition variable
     if (sem_init(&(philos[philo_id].block_semaphore), 0, 0)) {
@@ -267,61 +264,72 @@ static void create_philothread(int philo_id) {
     }
 
     // Wait until thread has initialized itself
-    pthread_barrier_wait(&barrier);
+    pthread_barrier_wait(&arg_barrier);
 }
 
+
+static void philo_block(int id){
+	 if (philos[id].command == BLOCK) {
+            sem_wait(&(philos[id].block_semaphore));
+        }
+}
+static void philo_idle(int time, int id){
+	 for (int i = 0; i < time; i++) {
+            if(philos[id].command == QUIT) {
+				break;
+			}
+            else if (philos[id].command == PROCEED){
+				philos[id].command = NORMAL_EXECUTION;
+                break;
+            } else philo_block(id);
+            
+        }
+	
+}
 /*
+ * 
  * Loop for the philosopher threads
  */
+
+static void philo_workout(int id){
+	philos[id].state = WORKOUT;
+    philo_idle(WORKOUT_LOOP, id);
+}
+static void philo_rest(int id){
+	philos[id].state = REST;
+    philo_idle(REST_LOOP,id);
+}
+static void get_weight(int id,int total){
+	philos[id].state = GET_WEIGHTS;
+    philo_block(id);
+    gym_get_weights(total, philos[id].weights);
+}
+
+static void put_weights(int id){
+	philos[id].state = RETURN_WEIGHTS;
+    philo_block(id);
+    gym_return_weights(philos[id].weights);
+}
+
 static void* philo_loop(void *attributes) {
     // get attributes and store them in local variables
     PhiloAttributes *attr = (PhiloAttributes*) attributes;
     int id = attr->id;
     int total = attr->total;
-    int weights[GYM_WEIGHTS_AVAILIABLE_SIZE] = { 0 };
-    philos[id].weights = weights;
 
-    // tell main that we finished initialization
-    pthread_barrier_wait(&barrier);
+    // tell create_philothread that we finished initialization
+    pthread_barrier_wait(&arg_barrier);
+    
+    // Wait for initialization of all threads
+    pthread_barrier_wait(&init_barrier);
 
     // philoloop "main" code
-    while (philos[id].command != QUIT) {
-        // GET WEIGHTS
-        philos[id].state = GET_WEIGHTS;
-        if (philos[id].command == BLOCK) {
-            sem_wait(&(philos[id].block_semaphore));
-        }
-        gym_get_weights(total, weights);
-
-        // WORKOUT
-        philos[id].state = WORKOUT;
-        for (int i = 0; i < WORKOUT_LOOP; i++) {
-            if (philos[id].command == PROCEED || philos[id].command == QUIT) {
-                break;
-            } else if (philos[id].command == BLOCK) {
-                sem_wait(&(philos[id].block_semaphore));
-            }
-        }
-
-        // PUT WEIGHTS
-        philos[id].state = RETURN_WEIGHTS;
-        if (philos[id].command == BLOCK) {
-            sem_wait(&(philos[id].block_semaphore));
-        }
-        gym_return_weights(weights);
-
-        // REST
-        philos[id].state = REST;
-        for (int i = 0; i < REST_LOOP; i++) {
-            if (philos[id].command == PROCEED || philos[id].command == QUIT) {
-                break;
-            } else if (philos[id].command == BLOCK) {
-                sem_wait(&(philos[id].block_semaphore));
-            }
-        }
+    while (philos[id].command != QUIT) { 
+        get_weight(id,total);
+        philo_workout(id);
+        put_weights(id);
+        philo_rest(id); 
     }
-    // cleanup
-    philos[id].weights = NULL;
 
     return NULL;
 }

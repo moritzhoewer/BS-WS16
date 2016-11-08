@@ -14,7 +14,12 @@
 #include "philosophers.h"
 
 /**
- * @brief No longer works, because of condition variable
+ * @brief The size of the read buffer
+ */
+#define BUFFER_SIZE 10
+
+/*
+ * No longer works, because of condition variable
  */
 /*void test_is_combination_possible() {
     // take out some weights
@@ -44,9 +49,47 @@
     gym_return_weights(my_weights);
 }*/
 
+/**
+ * @brief Program entry
+ */
 int main(void) {
+	char input[BUFFER_SIZE] = { 0 };
+	bool run=true;
+	int philosophers_ID;
     gym_init();
     philosophers_init();
+    while(run){
+		if(fgets(input, BUFFER_SIZE, stdin) != NULL){
+			switch(input[0]){
+				case QUIT_PHILOSOPHER:
+				case UPPER_QUIT_PHILOSOPHER:
+					run=false;	
+					break;
+				case BLOCK_PHILOSOPHER:
+			        if(EOF != sscanf(&input[1],"%d",&philosophers_ID)){
+						philosophers_block(philosophers_ID);
+				    }
+					break;
+				case UNBLOCK_PHILOSOPHER:
+					if(EOF != sscanf(&input[1],"%d",&philosophers_ID)){
+						philosophers_unblock(philosophers_ID);
+				    }
+					break;
+				case PROCEED_PHILOSOPHER:
+					if(EOF != sscanf(&input[1],"%d",&philosophers_ID)){
+						philosophers_proceed(philosophers_ID);
+				    }
+					break;
+				default: 
+				    printf("\n!!!\nEs sind nur folgende Kombinationen erlaubt");
+					printf(" \"%c\"[0-%d],", BLOCK_PHILOSOPHER, PHILOSOPHERS_COUNT);
+					printf(" \"%c\"[0-%d],", UNBLOCK_PHILOSOPHER, PHILOSOPHERS_COUNT);
+					printf(" \"%c\"[0-%d] ",PROCEED_PHILOSOPHER, PHILOSOPHERS_COUNT);
+					printf(" und \"%c\" bzw. \"%c\" ",QUIT_PHILOSOPHER,UPPER_QUIT_PHILOSOPHER);
+					printf("\n!!!\n");
+			}
+		}
+	}
     philosophers_quit();
     return 0;
 }

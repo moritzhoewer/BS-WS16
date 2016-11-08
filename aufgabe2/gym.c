@@ -116,12 +116,11 @@ void gym_init() {
  * is returned
  */
 void gym_get_weights(int total, int weight_counts[]) {
+//    err = pthread_mutex_lock(&mtx)
     if (pthread_mutex_lock(&mtx)) {
         perror("[gym_get_weights] Failed to lock mutex");
         exit(EXIT_FAILURE);
     }
-
-    philosophers_display_status(weights_availiable);
 
     while (!is_combination_possible(total, weight_counts,
     GYM_WEIGHTS_AVAILIABLE_SIZE - 1)) {
