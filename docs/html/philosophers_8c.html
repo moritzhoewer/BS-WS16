@@ -74,6 +74,7 @@ $(document).ready(function(){initNavTree('philosophers_8c.html','');});
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;pthread.h&gt;</code><br />
 <code>#include &lt;semaphore.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="philosophers_8h.html">philosophers.h</a>&quot;</code><br />
@@ -85,18 +86,21 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_philosopher.html">Philosopher</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to represent and manage a <a class="el" href="struct_philosopher.html" title="Structure to represent and manage a Philosopher. ">Philosopher</a>.  <a href="struct_philosopher.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_philo_attributes.html">PhiloAttributes</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to pass to new philosopher thread.  <a href="struct_philo_attributes.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:acf56d21ac7a3326700edbe13d9432ec1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>&#160;&#160;&#160;5</td></tr>
-<tr class="memdesc:acf56d21ac7a3326700edbe13d9432ec1"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many Philosophers will be created.  <a href="#acf56d21ac7a3326700edbe13d9432ec1">More...</a><br /></td></tr>
-<tr class="separator:acf56d21ac7a3326700edbe13d9432ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a767eccb0a577424254117fc1a8f8900d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a767eccb0a577424254117fc1a8f8900d">BARRIER_THRESHOLD</a>&#160;&#160;&#160;2</td></tr>
-<tr class="memdesc:a767eccb0a577424254117fc1a8f8900d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Threshold for the barrier.  <a href="#a767eccb0a577424254117fc1a8f8900d">More...</a><br /></td></tr>
-<tr class="separator:a767eccb0a577424254117fc1a8f8900d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0698d41a21eedfc5a5221b1004d4047"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#ac0698d41a21eedfc5a5221b1004d4047">ARG_BARRIER_THRESHOLD</a>&#160;&#160;&#160;2</td></tr>
+<tr class="memdesc:ac0698d41a21eedfc5a5221b1004d4047"><td class="mdescLeft">&#160;</td><td class="mdescRight">Threshold for the arg_barrier.  <a href="#ac0698d41a21eedfc5a5221b1004d4047">More...</a><br /></td></tr>
+<tr class="separator:ac0698d41a21eedfc5a5221b1004d4047"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36c83038d7bacfb8306c29b9497c79ac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a36c83038d7bacfb8306c29b9497c79ac">INIT_BARRIER_THRESHOLD</a>&#160;&#160;&#160;(<a class="el" href="philosophers_8h.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a> + 1)</td></tr>
+<tr class="memdesc:a36c83038d7bacfb8306c29b9497c79ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Threshold for the init_barrier.  <a href="#a36c83038d7bacfb8306c29b9497c79ac">More...</a><br /></td></tr>
+<tr class="separator:a36c83038d7bacfb8306c29b9497c79ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d73011da925e4dcf3ebab65e7fc8bfc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a2d73011da925e4dcf3ebab65e7fc8bfc">SEM_NOT_SHARED</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a2d73011da925e4dcf3ebab65e7fc8bfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">the semapore is not shared between processes  <a href="#a2d73011da925e4dcf3ebab65e7fc8bfc">More...</a><br /></td></tr>
+<tr class="separator:a2d73011da925e4dcf3ebab65e7fc8bfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a762f4e819e1d9fd16418f1c11a6a792c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a762f4e819e1d9fd16418f1c11a6a792c">SEM_INITIAL_VALUE</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a762f4e819e1d9fd16418f1c11a6a792c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The initila value for the semaphore.  <a href="#a762f4e819e1d9fd16418f1c11a6a792c">More...</a><br /></td></tr>
+<tr class="separator:a762f4e819e1d9fd16418f1c11a6a792c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01448cbfb04d57323767c1c6fbe79fad"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a01448cbfb04d57323767c1c6fbe79fad">REST_LOOP</a>&#160;&#160;&#160;1000000000</td></tr>
 <tr class="memdesc:a01448cbfb04d57323767c1c6fbe79fad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counter for the Rest Loop.  <a href="#a01448cbfb04d57323767c1c6fbe79fad">More...</a><br /></td></tr>
 <tr class="separator:a01448cbfb04d57323767c1c6fbe79fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -127,12 +131,30 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a216b298b354354225931f3038f52578b"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a216b298b354354225931f3038f52578b">philo_loop</a> (void *attributes)</td></tr>
-<tr class="memdesc:a216b298b354354225931f3038f52578b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loop for the philosopher threads.  <a href="#a216b298b354354225931f3038f52578b">More...</a><br /></td></tr>
-<tr class="separator:a216b298b354354225931f3038f52578b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad53482335f50ad2aba9ffc0790ecadbe"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#ad53482335f50ad2aba9ffc0790ecadbe">philo_loop</a> (void *arg)</td></tr>
+<tr class="memdesc:ad53482335f50ad2aba9ffc0790ecadbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loop for the philosopher threads.  <a href="#ad53482335f50ad2aba9ffc0790ecadbe">More...</a><br /></td></tr>
+<tr class="separator:ad53482335f50ad2aba9ffc0790ecadbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a947c9e7c64ba6dbefaf4d3c6481b7cdf"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a947c9e7c64ba6dbefaf4d3c6481b7cdf">create_philothread</a> (int philo_id)</td></tr>
 <tr class="memdesc:a947c9e7c64ba6dbefaf4d3c6481b7cdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new philosopher thread and initializes it.  <a href="#a947c9e7c64ba6dbefaf4d3c6481b7cdf">More...</a><br /></td></tr>
 <tr class="separator:a947c9e7c64ba6dbefaf4d3c6481b7cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7efa40ffa2f2088cc480402f058df12"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#ae7efa40ffa2f2088cc480402f058df12">check_block</a> (int id)</td></tr>
+<tr class="memdesc:ae7efa40ffa2f2088cc480402f058df12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if this thread should block.  <a href="#ae7efa40ffa2f2088cc480402f058df12">More...</a><br /></td></tr>
+<tr class="separator:ae7efa40ffa2f2088cc480402f058df12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5049507b7f178a36f95a67869fb56db0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a5049507b7f178a36f95a67869fb56db0">idle_loop</a> (int time, int id)</td></tr>
+<tr class="memdesc:a5049507b7f178a36f95a67869fb56db0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Busy witing loop.  <a href="#a5049507b7f178a36f95a67869fb56db0">More...</a><br /></td></tr>
+<tr class="separator:a5049507b7f178a36f95a67869fb56db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f6269092b670fa69ef6c4bf26c1463e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a8f6269092b670fa69ef6c4bf26c1463e">workout</a> (int id)</td></tr>
+<tr class="memdesc:a8f6269092b670fa69ef6c4bf26c1463e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Workout phase.  <a href="#a8f6269092b670fa69ef6c4bf26c1463e">More...</a><br /></td></tr>
+<tr class="separator:a8f6269092b670fa69ef6c4bf26c1463e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc774cdd333c5cfe600c320ff633366c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#acc774cdd333c5cfe600c320ff633366c">rest</a> (int id)</td></tr>
+<tr class="memdesc:acc774cdd333c5cfe600c320ff633366c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resting phase.  <a href="#acc774cdd333c5cfe600c320ff633366c">More...</a><br /></td></tr>
+<tr class="separator:acc774cdd333c5cfe600c320ff633366c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c97a2a6e23765c1787df29a056e0fb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#aa9c97a2a6e23765c1787df29a056e0fb">get_weights</a> (int id)</td></tr>
+<tr class="memdesc:aa9c97a2a6e23765c1787df29a056e0fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getting weights from gym phase.  <a href="#aa9c97a2a6e23765c1787df29a056e0fb">More...</a><br /></td></tr>
+<tr class="separator:aa9c97a2a6e23765c1787df29a056e0fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a296b9a00d42570d3235cd726885ecba9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a296b9a00d42570d3235cd726885ecba9">put_weights</a> (int id)</td></tr>
+<tr class="memdesc:a296b9a00d42570d3235cd726885ecba9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returning weights to gym phase.  <a href="#a296b9a00d42570d3235cd726885ecba9">More...</a><br /></td></tr>
+<tr class="separator:a296b9a00d42570d3235cd726885ecba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae571ac94612242ec264212453f48d470"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#ae571ac94612242ec264212453f48d470">philosophers_display_status</a> (const int gym_weights[])</td></tr>
 <tr class="memdesc:ae571ac94612242ec264212453f48d470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Displays the current status on the screen.  <a href="#ae571ac94612242ec264212453f48d470">More...</a><br /></td></tr>
 <tr class="separator:ae571ac94612242ec264212453f48d470"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,12 +167,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a405b7baa1ed3d77b2ca914302e879cf1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a405b7baa1ed3d77b2ca914302e879cf1">philosophers_block</a> (int philo_id)</td></tr>
 <tr class="memdesc:a405b7baa1ed3d77b2ca914302e879cf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocks the specified philosopher.  <a href="#a405b7baa1ed3d77b2ca914302e879cf1">More...</a><br /></td></tr>
 <tr class="separator:a405b7baa1ed3d77b2ca914302e879cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa71ab56e1f85c5c1ba75018866152b2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#aaa71ab56e1f85c5c1ba75018866152b2">philosopher_unblock</a> (int philo_id)</td></tr>
-<tr class="memdesc:aaa71ab56e1f85c5c1ba75018866152b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unblocks the specified philosopher.  <a href="#aaa71ab56e1f85c5c1ba75018866152b2">More...</a><br /></td></tr>
-<tr class="separator:aaa71ab56e1f85c5c1ba75018866152b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c5a6417a0b026cf72f47d5fa87e310e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a3c5a6417a0b026cf72f47d5fa87e310e">philosopher_proceed</a> (int philo_id)</td></tr>
-<tr class="memdesc:a3c5a6417a0b026cf72f47d5fa87e310e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proceeds the specified philosopher behind the current loop.  <a href="#a3c5a6417a0b026cf72f47d5fa87e310e">More...</a><br /></td></tr>
-<tr class="separator:a3c5a6417a0b026cf72f47d5fa87e310e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72eccb8f0b93fe0858d92b5f062b902a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a72eccb8f0b93fe0858d92b5f062b902a">philosophers_unblock</a> (int philo_id)</td></tr>
+<tr class="memdesc:a72eccb8f0b93fe0858d92b5f062b902a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unblocks the specified philosopher.  <a href="#a72eccb8f0b93fe0858d92b5f062b902a">More...</a><br /></td></tr>
+<tr class="separator:a72eccb8f0b93fe0858d92b5f062b902a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12e0f18fd601e4b044829cbe8e89b330"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a12e0f18fd601e4b044829cbe8e89b330">philosophers_proceed</a> (int philo_id)</td></tr>
+<tr class="memdesc:a12e0f18fd601e4b044829cbe8e89b330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proceeds the specified philosopher behind the current loop.  <a href="#a12e0f18fd601e4b044829cbe8e89b330">More...</a><br /></td></tr>
+<tr class="separator:a12e0f18fd601e4b044829cbe8e89b330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -158,13 +180,16 @@ Variables</h2></td></tr>
 <tr class="separator:aa2aa775c4c3d727f8b1b568f60644933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac54aa2918d547c0b5a41c00bc60316ec"><td class="memItemLeft" align="right" valign="top">static const char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#ac54aa2918d547c0b5a41c00bc60316ec">philo_command_names</a> [] = { 'n', 'b', 'p', 'q' }</td></tr>
 <tr class="separator:ac54aa2918d547c0b5a41c00bc60316ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a779bfbbb688cf46720cfb65109ea4858"><td class="memItemLeft" align="right" valign="top">static pthread_barrier_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a779bfbbb688cf46720cfb65109ea4858">barrier</a></td></tr>
-<tr class="memdesc:a779bfbbb688cf46720cfb65109ea4858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Barrier, to make sure threads get initialized properly.  <a href="#a779bfbbb688cf46720cfb65109ea4858">More...</a><br /></td></tr>
-<tr class="separator:a779bfbbb688cf46720cfb65109ea4858"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c768055919b8c8db2785e904df02663"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_philosopher.html">Philosopher</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a4c768055919b8c8db2785e904df02663">philos</a> [<a class="el" href="philosophers_8c.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>]</td></tr>
-<tr class="memdesc:a4c768055919b8c8db2785e904df02663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array to manage all Threads.  <a href="#a4c768055919b8c8db2785e904df02663">More...</a><br /></td></tr>
+<tr class="memitem:a79aaae2e0185a67cf72412621c44f914"><td class="memItemLeft" align="right" valign="top">static pthread_barrier_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a79aaae2e0185a67cf72412621c44f914">arg_barrier</a></td></tr>
+<tr class="memdesc:a79aaae2e0185a67cf72412621c44f914"><td class="mdescLeft">&#160;</td><td class="mdescRight">Barrier, to make sure threads get their arguments properly.  <a href="#a79aaae2e0185a67cf72412621c44f914">More...</a><br /></td></tr>
+<tr class="separator:a79aaae2e0185a67cf72412621c44f914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3a2f0cbc978f54b5886e97db96db4eb"><td class="memItemLeft" align="right" valign="top">static pthread_barrier_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#ae3a2f0cbc978f54b5886e97db96db4eb">init_barrier</a></td></tr>
+<tr class="memdesc:ae3a2f0cbc978f54b5886e97db96db4eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Barrier, to make sure all threads get initialized before the first one starts.  <a href="#ae3a2f0cbc978f54b5886e97db96db4eb">More...</a><br /></td></tr>
+<tr class="separator:ae3a2f0cbc978f54b5886e97db96db4eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c768055919b8c8db2785e904df02663"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_philosopher.html">Philosopher</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a4c768055919b8c8db2785e904df02663">philos</a> [<a class="el" href="philosophers_8h.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>]</td></tr>
+<tr class="memdesc:a4c768055919b8c8db2785e904df02663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array to manage all threads.  <a href="#a4c768055919b8c8db2785e904df02663">More...</a><br /></td></tr>
 <tr class="separator:a4c768055919b8c8db2785e904df02663"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50d4202e901899897c87c8328e770601"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a50d4202e901899897c87c8328e770601">training_weights</a> [<a class="el" href="philosophers_8c.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>] = { 6, 8, 12, 12, 14 }</td></tr>
+<tr class="memitem:a50d4202e901899897c87c8328e770601"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="philosophers_8c.html#a50d4202e901899897c87c8328e770601">training_weights</a> [<a class="el" href="philosophers_8h.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>] = { <a class="el" href="philosophers_8h.html#ac61d3babbe9c3bf059b7fbfe2d67c889">PHILOSOPHERS_WEIGHTS</a> }</td></tr>
 <tr class="memdesc:a50d4202e901899897c87c8328e770601"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array that contains the training weights for each philosopher.  <a href="#a50d4202e901899897c87c8328e770601">More...</a><br /></td></tr>
 <tr class="separator:a50d4202e901899897c87c8328e770601"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -175,37 +200,37 @@ Variables</h2></td></tr>
 <dd>
 Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'+'ef'+'fle'+'r@'+'haw'+'-h'+'amb'+'ur'+'g.d'+'e'; return false;">Jesko<span style="display: none;">.nosp@m.</span>.Tre<span style="display: none;">.nosp@m.</span>ffler<span style="display: none;">.nosp@m.</span>@haw<span style="display: none;">.nosp@m.</span>-hamb<span style="display: none;">.nosp@m.</span>urg.<span style="display: none;">.nosp@m.</span>de</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>07.11.2016 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>14.11.2016 </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a767eccb0a577424254117fc1a8f8900d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a767eccb0a577424254117fc1a8f8900d">&sect;&nbsp;</a></span>BARRIER_THRESHOLD</h2>
+<a id="ac0698d41a21eedfc5a5221b1004d4047"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0698d41a21eedfc5a5221b1004d4047">&sect;&nbsp;</a></span>ARG_BARRIER_THRESHOLD</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define BARRIER_THRESHOLD&#160;&#160;&#160;2</td>
+          <td class="memname">#define ARG_BARRIER_THRESHOLD&#160;&#160;&#160;2</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Threshold for the barrier. </p>
+<p>Threshold for the arg_barrier. </p>
 
 </div>
 </div>
-<a id="acf56d21ac7a3326700edbe13d9432ec1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf56d21ac7a3326700edbe13d9432ec1">&sect;&nbsp;</a></span>PHILOSOPHERS_COUNT</h2>
+<a id="a36c83038d7bacfb8306c29b9497c79ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36c83038d7bacfb8306c29b9497c79ac">&sect;&nbsp;</a></span>INIT_BARRIER_THRESHOLD</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define PHILOSOPHERS_COUNT&#160;&#160;&#160;5</td>
+          <td class="memname">#define INIT_BARRIER_THRESHOLD&#160;&#160;&#160;(<a class="el" href="philosophers_8h.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a> + 1)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>How many Philosophers will be created. </p>
+<p>Threshold for the init_barrier. </p>
 
 </div>
 </div>
@@ -222,6 +247,38 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 </div><div class="memdoc">
 
 <p>Counter for the Rest Loop. </p>
+
+</div>
+</div>
+<a id="a762f4e819e1d9fd16418f1c11a6a792c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a762f4e819e1d9fd16418f1c11a6a792c">&sect;&nbsp;</a></span>SEM_INITIAL_VALUE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SEM_INITIAL_VALUE&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The initila value for the semaphore. </p>
+
+</div>
+</div>
+<a id="a2d73011da925e4dcf3ebab65e7fc8bfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d73011da925e4dcf3ebab65e7fc8bfc">&sect;&nbsp;</a></span>SEM_NOT_SHARED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SEM_NOT_SHARED&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>the semapore is not shared between processes </p>
 
 </div>
 </div>
@@ -260,7 +317,7 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 </td></tr>
 <tr><td class="fieldname"><a id="a237401c8b553fa6c88c8e0c89cc61b14a02fc27068fe9a3c151ffcc08ec5bb65d"></a>BLOCK&#160;</td><td class="fielddoc"><p>thread should block </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a237401c8b553fa6c88c8e0c89cc61b14ac06a4634de9d549a68aca2638533611e"></a>PROCEED&#160;</td><td class="fielddoc"><p>thrwead should proceed to the end of the loop </p>
+<tr><td class="fieldname"><a id="a237401c8b553fa6c88c8e0c89cc61b14ac06a4634de9d549a68aca2638533611e"></a>PROCEED&#160;</td><td class="fielddoc"><p>thread should proceed to the end of the loop </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a237401c8b553fa6c88c8e0c89cc61b14a76bdc8adfd6c6463ab269ff4c06be9b4"></a>QUIT&#160;</td><td class="fielddoc"><p>thread should finish and end itself </p>
 </td></tr>
@@ -297,6 +354,41 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ae7efa40ffa2f2088cc480402f058df12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7efa40ffa2f2088cc480402f058df12">&sect;&nbsp;</a></span>check_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void check_block </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if this thread should block. </p>
+<p>If yes, then it blocks on the associated semaphore</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>the thread id </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a947c9e7c64ba6dbefaf4d3c6481b7cdf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a947c9e7c64ba6dbefaf4d3c6481b7cdf">&sect;&nbsp;</a></span>create_philothread()</h2>
 
@@ -331,8 +423,88 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 
 </div>
 </div>
-<a id="a216b298b354354225931f3038f52578b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a216b298b354354225931f3038f52578b">&sect;&nbsp;</a></span>philo_loop()</h2>
+<a id="aa9c97a2a6e23765c1787df29a056e0fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9c97a2a6e23765c1787df29a056e0fb">&sect;&nbsp;</a></span>get_weights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void get_weights </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Getting weights from gym phase. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>the thread id </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5049507b7f178a36f95a67869fb56db0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5049507b7f178a36f95a67869fb56db0">&sect;&nbsp;</a></span>idle_loop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void idle_loop </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>time</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Busy witing loop. </p>
+<p>Executes a loop time times, checking command flag on every iteration.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time</td><td>the amount of iterations </td></tr>
+    <tr><td class="paramname">id</td><td>the thread id (for flag checking) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad53482335f50ad2aba9ffc0790ecadbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad53482335f50ad2aba9ffc0790ecadbe">&sect;&nbsp;</a></span>philo_loop()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -344,7 +516,7 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
           <td class="memname">static void * philo_loop </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>attributes</em></td><td>)</td>
+          <td class="paramname"><em>arg</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -358,75 +530,7 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 <p>Loop for the philosopher threads. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">attributes</td><td>the id of the philosopher (<a class="el" href="struct_philo_attributes.html" title="Structure to pass to new philosopher thread. ">PhiloAttributes</a>) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a3c5a6417a0b026cf72f47d5fa87e310e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c5a6417a0b026cf72f47d5fa87e310e">&sect;&nbsp;</a></span>philosopher_proceed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int philosopher_proceed </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>philo_id</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Proceeds the specified philosopher behind the current loop. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">philo_id</td><td>the ID of the philosopher to proceed </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>error code </dd></dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">0</td><td>no error </td></tr>
-    <tr><td class="paramname">E_NO_SUCH_PHILOSOPHER</td><td>the given ID does not exist </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aaa71ab56e1f85c5c1ba75018866152b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa71ab56e1f85c5c1ba75018866152b2">&sect;&nbsp;</a></span>philosopher_unblock()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int philosopher_unblock </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>philo_id</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Unblocks the specified philosopher. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">philo_id</td><td>the ID of the philosopher to unblock </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>error code </dd></dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">0</td><td>no error </td></tr>
-    <tr><td class="paramname">E_NO_SUCH_PHILOSOPHER</td><td>the given ID does not exist </td></tr>
+    <tr><td class="paramname">arg</td><td>the id of the philosopher (int) </td></tr>
   </table>
   </dd>
 </dl>
@@ -484,7 +588,13 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 </div><div class="memdoc">
 
 <p>Displays the current status on the screen. </p>
-<p>Will print state and held weights information for all philosophers. </p>
+<p>Will print state and held weights information for all philosophers and the gym.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">gym_weights</td><td>the weights currently present in the gym. used for displaying and sync error checking </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -507,6 +617,40 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 
 </div>
 </div>
+<a id="a12e0f18fd601e4b044829cbe8e89b330"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12e0f18fd601e4b044829cbe8e89b330">&sect;&nbsp;</a></span>philosophers_proceed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int philosophers_proceed </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>philo_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Proceeds the specified philosopher behind the current loop. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">philo_id</td><td>the ID of the philosopher to proceed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>error code </dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>no error </td></tr>
+    <tr><td class="paramname">E_NO_SUCH_PHILOSOPHER</td><td>the given ID does not exist </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="aac6cf00dab25d7236ca23ad8093677a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aac6cf00dab25d7236ca23ad8093677a0">&sect;&nbsp;</a></span>philosophers_quit()</h2>
 
@@ -526,9 +670,42 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 
 </div>
 </div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="a779bfbbb688cf46720cfb65109ea4858"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a779bfbbb688cf46720cfb65109ea4858">&sect;&nbsp;</a></span>barrier</h2>
+<a id="a72eccb8f0b93fe0858d92b5f062b902a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72eccb8f0b93fe0858d92b5f062b902a">&sect;&nbsp;</a></span>philosophers_unblock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int philosophers_unblock </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>philo_id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unblocks the specified philosopher. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">philo_id</td><td>the ID of the philosopher to unblock </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>error code </dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>no error </td></tr>
+    <tr><td class="paramname">E_NO_SUCH_PHILOSOPHER</td><td>the given ID does not exist </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a296b9a00d42570d3235cd726885ecba9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a296b9a00d42570d3235cd726885ecba9">&sect;&nbsp;</a></span>put_weights()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -537,7 +714,11 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">pthread_barrier_t barrier</td>
+          <td class="memname">static void put_weights </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -547,7 +728,130 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 </table>
 </div><div class="memdoc">
 
-<p>Barrier, to make sure threads get initialized properly. </p>
+<p>Returning weights to gym phase. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>the thread id </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acc774cdd333c5cfe600c320ff633366c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc774cdd333c5cfe600c320ff633366c">&sect;&nbsp;</a></span>rest()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void rest </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Resting phase. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>the thread id </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8f6269092b670fa69ef6c4bf26c1463e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f6269092b670fa69ef6c4bf26c1463e">&sect;&nbsp;</a></span>workout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void workout </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Workout phase. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>the thread id </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a79aaae2e0185a67cf72412621c44f914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79aaae2e0185a67cf72412621c44f914">&sect;&nbsp;</a></span>arg_barrier</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">pthread_barrier_t arg_barrier</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Barrier, to make sure threads get their arguments properly. </p>
+
+</div>
+</div>
+<a id="ae3a2f0cbc978f54b5886e97db96db4eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3a2f0cbc978f54b5886e97db96db4eb">&sect;&nbsp;</a></span>init_barrier</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">pthread_barrier_t init_barrier</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Barrier, to make sure all threads get initialized before the first one starts. </p>
 
 </div>
 </div>
@@ -605,7 +909,7 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_philosopher.html">Philosopher</a> philos[<a class="el" href="philosophers_8c.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>]</td>
+          <td class="memname"><a class="el" href="struct_philosopher.html">Philosopher</a> philos[<a class="el" href="philosophers_8h.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>]</td>
         </tr>
       </table>
   </td>
@@ -615,7 +919,7 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
 </table>
 </div><div class="memdoc">
 
-<p>Array to manage all Threads. </p>
+<p>Array to manage all threads. </p>
 
 </div>
 </div>
@@ -629,7 +933,7 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int training_weights[<a class="el" href="philosophers_8c.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>] = { 6, 8, 12, 12, 14 }</td>
+          <td class="memname">const int training_weights[<a class="el" href="philosophers_8h.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a>] = { <a class="el" href="philosophers_8h.html#ac61d3babbe9c3bf059b7fbfe2d67c889">PHILOSOPHERS_WEIGHTS</a> }</td>
         </tr>
       </table>
   </td>

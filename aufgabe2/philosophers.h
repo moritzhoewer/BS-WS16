@@ -3,48 +3,38 @@
  * @author  Moritz Hoewer (Moritz.Hoewer@haw-hamburg.de)
  * @author  Jesko Treffler (Jesko.Treffler@haw-hamburg.de)
  * @version 1.0
- * @date    07.11.2016
+ * @date    14.11.2016
  * @brief   Header for the Philosophers module
  ******************************************************************
  */
 
 #ifndef PHILOSOPHERS_H_
 #define PHILOSOPHERS_H_
-#define BLOCK_PHILOSOPHER 'b'
-#define UNBLOCK_PHILOSOPHER 'u'
-#define PROCEED_PHILOSOPHER 'p'
-#define QUIT_PHILOSOPHER 'q'
-#define UPPER_QUIT_PHILOSOPHER 'Q'
 
 /**
  * @brief How many Philosophers will be created
+ *
+ * If this is changed, PHILOSOPHERS_WEIGHTS must also be changed to match
  */
 #define PHILOSOPHERS_COUNT 5
 
 /**
  * @brief The weights for the Philosophers
+ *
+ * If the number of weights is changed, PHILOSOPHERS_COUNT must also be changed
+ * to match.
+ * This does not apply for changes in amount.
  */
 #define PHILOSOPHERS_WEIGHTS 6, 8, 12, 12, 14
 
 /**
- * @brief Threshold for the arg_barrier
- */
-#define BARRIER_THRESHOLD 2
-
-/**
- * @brief Counter for the Rest Loop
- */
-#define REST_LOOP 1000000000
-
-/**
- * @brief Counter for Workout Loop
- */
-#define WORKOUT_LOOP 500000000
-
-/**
  * @brief Displays the current status on the screen
  *
- * Will print state and held weights information for all philosophers.
+ * Will print state and held weights information for all philosophers and the
+ * gym.
+ *
+ * @param gym_weights the weights currently present in the gym.
+ *                    used for displaying and sync error checking
  */
 void philosophers_display_status(const int gym_weights[]);
 

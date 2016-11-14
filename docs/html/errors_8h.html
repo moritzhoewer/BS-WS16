@@ -66,22 +66,28 @@ $(document).ready(function(){initNavTree('errors_8h.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Collection of all the Error codes for the Program.  
+<p>Collection of all the Error handling for the Program.  
 <a href="#details">More...</a></p>
-<table class="memberdecls">
+<div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a4e57a947ca4886da6d7e803ef9446956"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="errors_8h.html#a4e57a947ca4886da6d7e803ef9446956">FATAL_ERROR_HANDLING</a>(result,  message)</td></tr>
+<tr class="memdesc:a4e57a947ca4886da6d7e803ef9446956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for and handles a fatal error.  <a href="#a4e57a947ca4886da6d7e803ef9446956">More...</a><br /></td></tr>
+<tr class="separator:a4e57a947ca4886da6d7e803ef9446956"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdae3158e626f044d335afc03b4f250c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="errors_8h.html#afdae3158e626f044d335afc03b4f250c">E_NO_SUCH_PHILOSOPHER</a>&#160;&#160;&#160;- 1</td></tr>
+<tr class="memdesc:afdae3158e626f044d335afc03b4f250c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Error code returned by command methods if they get an invalid ID.  <a href="#afdae3158e626f044d335afc03b4f250c">More...</a><br /></td></tr>
 <tr class="separator:afdae3158e626f044d335afc03b4f250c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Collection of all the Error codes for the Program. </p>
+<div class="textblock"><p>Collection of all the Error handling for the Program. </p>
 <hr/>
 <dl class="section author"><dt>Author</dt><dd>Moritz Hoewer (<a href="#" onclick="location.href='mai'+'lto:'+'Mor'+'it'+'z.H'+'oe'+'wer'+'@h'+'aw-'+'ha'+'mbu'+'rg'+'.de'; return false;">Morit<span style="display: none;">.nosp@m.</span>z.Ho<span style="display: none;">.nosp@m.</span>ewer@<span style="display: none;">.nosp@m.</span>haw-<span style="display: none;">.nosp@m.</span>hambu<span style="display: none;">.nosp@m.</span>rg.d<span style="display: none;">.nosp@m.</span>e</a>) </dd>
 <dd>
 Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'+'ef'+'fle'+'r@'+'haw'+'-h'+'amb'+'ur'+'g.d'+'e'; return false;">Jesko<span style="display: none;">.nosp@m.</span>.Tre<span style="display: none;">.nosp@m.</span>ffler<span style="display: none;">.nosp@m.</span>@haw<span style="display: none;">.nosp@m.</span>-hamb<span style="display: none;">.nosp@m.</span>urg.<span style="display: none;">.nosp@m.</span>de</a>) </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>07.11.2016 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>2.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>14.11.2016 </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="afdae3158e626f044d335afc03b4f250c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afdae3158e626f044d335afc03b4f250c">&sect;&nbsp;</a></span>E_NO_SUCH_PHILOSOPHER</h2>
@@ -94,6 +100,39 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Error code returned by command methods if they get an invalid ID. </p>
+
+</div>
+</div>
+<a id="a4e57a947ca4886da6d7e803ef9446956"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e57a947ca4886da6d7e803ef9446956">&sect;&nbsp;</a></span>FATAL_ERROR_HANDLING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FATAL_ERROR_HANDLING</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">result, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span>( (result) ) { \</div><div class="line">    perror( (message) ); \</div><div class="line">    exit(EXIT_FAILURE); \</div><div class="line">    }</div></div><!-- fragment -->
+<p>Checks for and handles a fatal error. </p>
+<p>Checks if result is not 0 (which indicates an error), in which case it prints message and quits with exit(EXIT_FAILURE) </p>
 
 </div>
 </div>

@@ -60,6 +60,7 @@ $(document).ready(function(){initNavTree('main_8c.html','');});
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">main.c File Reference</div>  </div>
@@ -74,10 +75,34 @@ $(document).ready(function(){initNavTree('main_8c.html','');});
 <code>#include &quot;<a class="el" href="errors_8h.html">errors.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="philosophers_8h.html">philosophers.h</a>&quot;</code><br />
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a9850fa71c7471a21943b325ace4d3905"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a9850fa71c7471a21943b325ace4d3905">BLOCK_CMD</a>&#160;&#160;&#160;'b'</td></tr>
+<tr class="memdesc:a9850fa71c7471a21943b325ace4d3905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command used to block a philosopher thread.  <a href="#a9850fa71c7471a21943b325ace4d3905">More...</a><br /></td></tr>
+<tr class="separator:a9850fa71c7471a21943b325ace4d3905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91eb30965c91ed2819fbd1b9fe97b286"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a91eb30965c91ed2819fbd1b9fe97b286">UNBLOCK_CMD</a>&#160;&#160;&#160;'u'</td></tr>
+<tr class="memdesc:a91eb30965c91ed2819fbd1b9fe97b286"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command used to unblock a philosopher thread.  <a href="#a91eb30965c91ed2819fbd1b9fe97b286">More...</a><br /></td></tr>
+<tr class="separator:a91eb30965c91ed2819fbd1b9fe97b286"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a325785de0386c847d489fe7e564e8c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a8a325785de0386c847d489fe7e564e8c">PROCEED_CMD</a>&#160;&#160;&#160;'p'</td></tr>
+<tr class="memdesc:a8a325785de0386c847d489fe7e564e8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command used to proceed a philosopher thread.  <a href="#a8a325785de0386c847d489fe7e564e8c">More...</a><br /></td></tr>
+<tr class="separator:a8a325785de0386c847d489fe7e564e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ef7e071c19c269106af126a0dcb606a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a9ef7e071c19c269106af126a0dcb606a">QUIT_CMD</a>&#160;&#160;&#160;'q'</td></tr>
+<tr class="memdesc:a9ef7e071c19c269106af126a0dcb606a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command used to quit all philosopher threads.  <a href="#a9ef7e071c19c269106af126a0dcb606a">More...</a><br /></td></tr>
+<tr class="separator:a9ef7e071c19c269106af126a0dcb606a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a148b935b9aace1674953d1bb0f483c4d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a148b935b9aace1674953d1bb0f483c4d">ALTERNATIVE_QUIT_CMD</a>&#160;&#160;&#160;'Q'</td></tr>
+<tr class="memdesc:a148b935b9aace1674953d1bb0f483c4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alternative Command used to quit all philosopher threads.  <a href="#a148b935b9aace1674953d1bb0f483c4d">More...</a><br /></td></tr>
+<tr class="separator:a148b935b9aace1674953d1bb0f483c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b20d41d6252e9871430c242cb1a56e7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a6b20d41d6252e9871430c242cb1a56e7">BUFFER_SIZE</a>&#160;&#160;&#160;10</td></tr>
+<tr class="memdesc:a6b20d41d6252e9871430c242cb1a56e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the read buffer.  <a href="#a6b20d41d6252e9871430c242cb1a56e7">More...</a><br /></td></tr>
+<tr class="separator:a6b20d41d6252e9871430c242cb1a56e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebadb332ba96ba2f29992ae65e209177"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#aebadb332ba96ba2f29992ae65e209177">CHECK_INVALID_ID</a>(res)</td></tr>
+<tr class="memdesc:aebadb332ba96ba2f29992ae65e209177"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for an invalid ID and prints an error message.  <a href="#aebadb332ba96ba2f29992ae65e209177">More...</a><br /></td></tr>
+<tr class="separator:aebadb332ba96ba2f29992ae65e209177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a840291bc02cba5474a4cb46a9b9566fe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a840291bc02cba5474a4cb46a9b9566fe">main</a> (void)</td></tr>
-<tr class="memdesc:a840291bc02cba5474a4cb46a9b9566fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">No longer works, because of condition variable.  <a href="#a840291bc02cba5474a4cb46a9b9566fe">More...</a><br /></td></tr>
+<tr class="memdesc:a840291bc02cba5474a4cb46a9b9566fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Program entry.  <a href="#a840291bc02cba5474a4cb46a9b9566fe">More...</a><br /></td></tr>
 <tr class="separator:a840291bc02cba5474a4cb46a9b9566fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -87,8 +112,127 @@ Functions</h2></td></tr>
 <dd>
 Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'+'ef'+'fle'+'r@'+'haw'+'-h'+'amb'+'ur'+'g.d'+'e'; return false;">Jesko<span style="display: none;">.nosp@m.</span>.Tre<span style="display: none;">.nosp@m.</span>ffler<span style="display: none;">.nosp@m.</span>@haw<span style="display: none;">.nosp@m.</span>-hamb<span style="display: none;">.nosp@m.</span>urg.<span style="display: none;">.nosp@m.</span>de</a>) </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>07.11.2016 </dd></dl>
-</div><h2 class="groupheader">Function Documentation</h2>
+<dl class="section date"><dt>Date</dt><dd>14.11.2016 </dd></dl>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a148b935b9aace1674953d1bb0f483c4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a148b935b9aace1674953d1bb0f483c4d">&sect;&nbsp;</a></span>ALTERNATIVE_QUIT_CMD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ALTERNATIVE_QUIT_CMD&#160;&#160;&#160;'Q'</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Alternative Command used to quit all philosopher threads. </p>
+
+</div>
+</div>
+<a id="a9850fa71c7471a21943b325ace4d3905"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9850fa71c7471a21943b325ace4d3905">&sect;&nbsp;</a></span>BLOCK_CMD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BLOCK_CMD&#160;&#160;&#160;'b'</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Command used to block a philosopher thread. </p>
+
+</div>
+</div>
+<a id="a6b20d41d6252e9871430c242cb1a56e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b20d41d6252e9871430c242cb1a56e7">&sect;&nbsp;</a></span>BUFFER_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BUFFER_SIZE&#160;&#160;&#160;10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The size of the read buffer. </p>
+
+</div>
+</div>
+<a id="aebadb332ba96ba2f29992ae65e209177"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebadb332ba96ba2f29992ae65e209177">&sect;&nbsp;</a></span>CHECK_INVALID_ID</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_INVALID_ID</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">res</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">if</span>((res) == <a class="code" href="errors_8h.html#afdae3158e626f044d335afc03b4f250c">E_NO_SUCH_PHILOSOPHER</a>){ \</div><div class="line">    printf(<span class="stringliteral">&quot;\n!!! &quot;</span>); \</div><div class="line">    printf(<span class="stringliteral">&quot;There is no Philosopher with id %d - valid ids are [0-%d]&quot;</span>, \</div><div class="line">        philosophers_ID, (<a class="code" href="philosophers_8h.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a> - 1)); \</div><div class="line">    printf(<span class="stringliteral">&quot; !!!\n\n&quot;</span>); \</div><div class="line">    }</div><div class="ttc" id="philosophers_8h_html_acf56d21ac7a3326700edbe13d9432ec1"><div class="ttname"><a href="philosophers_8h.html#acf56d21ac7a3326700edbe13d9432ec1">PHILOSOPHERS_COUNT</a></div><div class="ttdeci">#define PHILOSOPHERS_COUNT</div><div class="ttdoc">How many Philosophers will be created. </div><div class="ttdef"><b>Definition:</b> philosophers.h:19</div></div>
+<div class="ttc" id="errors_8h_html_afdae3158e626f044d335afc03b4f250c"><div class="ttname"><a href="errors_8h.html#afdae3158e626f044d335afc03b4f250c">E_NO_SUCH_PHILOSOPHER</a></div><div class="ttdeci">#define E_NO_SUCH_PHILOSOPHER</div><div class="ttdoc">Error code returned by command methods if they get an invalid ID. </div><div class="ttdef"><b>Definition:</b> errors.h:33</div></div>
+</div><!-- fragment -->
+<p>Checks for an invalid ID and prints an error message. </p>
+
+</div>
+</div>
+<a id="a8a325785de0386c847d489fe7e564e8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a325785de0386c847d489fe7e564e8c">&sect;&nbsp;</a></span>PROCEED_CMD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PROCEED_CMD&#160;&#160;&#160;'p'</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Command used to proceed a philosopher thread. </p>
+
+</div>
+</div>
+<a id="a9ef7e071c19c269106af126a0dcb606a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ef7e071c19c269106af126a0dcb606a">&sect;&nbsp;</a></span>QUIT_CMD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define QUIT_CMD&#160;&#160;&#160;'q'</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Command used to quit all philosopher threads. </p>
+
+</div>
+</div>
+<a id="a91eb30965c91ed2819fbd1b9fe97b286"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91eb30965c91ed2819fbd1b9fe97b286">&sect;&nbsp;</a></span>UNBLOCK_CMD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define UNBLOCK_CMD&#160;&#160;&#160;'u'</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Command used to unblock a philosopher thread. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
 <a id="a840291bc02cba5474a4cb46a9b9566fe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a840291bc02cba5474a4cb46a9b9566fe">&sect;&nbsp;</a></span>main()</h2>
 
@@ -105,7 +249,7 @@ Jesko Treffler (<a href="#" onclick="location.href='mai'+'lto:'+'Jes'+'ko'+'.Tr'
       </table>
 </div><div class="memdoc">
 
-<p>No longer works, because of condition variable. </p>
+<p>Program entry. </p>
 
 </div>
 </div>

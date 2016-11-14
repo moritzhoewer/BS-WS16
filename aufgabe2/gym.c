@@ -3,7 +3,7 @@
  * @author  Moritz Hoewer (Moritz.Hoewer@haw-hamburg.de)
  * @author  Jesko Treffler (Jesko.Treffler@haw-hamburg.de)
  * @version 1.0
- * @date    07.11.2016
+ * @date    14.11.2016
  * @brief   Implementation for the Gym module
  ******************************************************************
  */
@@ -97,14 +97,11 @@ void gym_init() {
     }
 
     // init monitor
-    if (pthread_mutex_init(&mtx, NULL)) {
-        perror("[gym_init] Failed to create Mutex");
-        exit(EXIT_FAILURE);
-    }
-    if (pthread_cond_init(&no_weights, NULL)) {
-        perror("[gym_init] Failed to create condition variable");
-        exit(EXIT_FAILURE);
-    }
+    int res = pthread_mutex_init(&mtx, NULL);
+    FATAL_ERROR_HANDLING(res, "[gym_init] Failed to create Mutex")
+
+    res = pthread_cond_init(&no_weights, NULL);
+    FATAL_ERROR_HANDLING(res, "[gym_init] Failed to create condition variable")
 }
 
 /*
@@ -116,18 +113,13 @@ void gym_init() {
  * is returned
  */
 void gym_get_weights(int total, int weight_counts[]) {
-//    err = pthread_mutex_lock(&mtx)
-    if (pthread_mutex_lock(&mtx)) {
-        perror("[gym_get_weights] Failed to lock mutex");
-        exit(EXIT_FAILURE);
-    }
+    int res = pthread_mutex_lock(&mtx);
+    FATAL_ERROR_HANDLING(res, "[gym_get_weights] Failed to lock mutex")
 
     while (!is_combination_possible(total, weight_counts,
     GYM_WEIGHTS_AVAILIABLE_SIZE - 1)) {
-        if (pthread_cond_wait(&no_weights, &mtx)) {
-            perror("[gym_get_weights] Wait on condition variable failed");
-            exit(EXIT_FAILURE);
-        }
+        res = pthread_cond_wait(&no_weights, &mtx);
+        FATAL_ERROR_HANDLING(res, "[gym_get_weights] Wait on condition variable failed")
     }
 
     philosophers_display_status(weights_availiable);
@@ -139,10 +131,8 @@ void gym_get_weights(int total, int weight_counts[]) {
  * [MONITOR METHOD] Returns weights from the caller to the gym.
  */
 void gym_return_weights(int weight_counts[]) {
-    if (pthread_mutex_lock(&mtx)) {
-        perror("[gym_return_weights] Failed to lock mutex");
-        exit(EXIT_FAILURE);
-    }
+    int res = pthread_mutex_lock(&mtx);
+    FATAL_ERROR_HANDLING(res, "[gym_return_weights] Failed to lock mutex")
 
     for (int i = 0; i < GYM_WEIGHTS_AVAILIABLE_SIZE; i++) {
         // "transfer" weights to gym
