@@ -1,2 +1,3 @@
 mmanage.o: mmanage.c mmanage.h vmem.h
 vmappl.o: vmappl.c vmappl.h vmaccess.h
+vmaccess.o: vmaccess.c vmaccess.h vmem.h

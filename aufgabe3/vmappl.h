@@ -23,8 +23,6 @@ void sort(int length);
 
 void swap(int addr1, int addr2);
 
-void vmem_cleanup(void);
-
 #define NDISPLAYCOLS 8
 void display_data(int length);
 #endif

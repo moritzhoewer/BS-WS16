@@ -31,8 +31,6 @@ void allocate_page(void);
 
 void fetch_page(int pt_idx);
 
-void store_page(int pt_idx);
-
 void update_pt(int frame);
 
 int find_remove_frame(void);
@@ -50,8 +48,6 @@ void init_pagefile(const char *pfname);
 void cleanup(void);
 
 void logger(struct logevent le);
-
-void dump_pt(void);
 
 /** Misc */
 #define MMANAGE_PFNAME "./pagefile.bin" /**< pagefile name */

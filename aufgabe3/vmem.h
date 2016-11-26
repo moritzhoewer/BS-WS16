@@ -20,6 +20,7 @@
 #include <sys/types.h>
 /* #include <sys/ipc.h> */
 #include <sys/mman.h>
+#include <sys/shm.h>
 
 #define FALSE 0
 #define TRUE (!FALSE)
@@ -50,7 +51,7 @@
 struct pt_entry {
    int flags;                  /* see defines above */
    int frame;                  /* Frame idx */
-   int count;                  /* Global counter as quasi-timestamp for LRU */
+   int last_used;              /* Global counter as quasi-timestamp for LRU */
 };
 
 struct vmem_adm_struct {
