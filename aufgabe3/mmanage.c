@@ -1,32 +1,61 @@
-/* Description: Memory Manager BSP3*/
-/* Prof. Dr. Wolfgang Fohl, HAW Hamburg */
-/* Winter 2016
- * 
- * This is the memory manager process that
- * works together with the vmaccess process to
- * mimic virtual memory management.
+/** ****************************************************************
+ * @file    aufgabe3/mmanage.c
  *
- * The memory manager process will be invoked
- * via a SIGUSR1 signal. It maintains the page table
- * and provides the data pages in shared memory
+ * This is the memory manager process that works together with the vmaccess
+ * process to mimic virtual memory management.
  *
- * This process is initiating the shared memory, so
- * it has to be started prior to the vmaccess process
+ * The memory manager process will be invoked via a SIGUSR1 signal. It
+ * maintains the page table and provides the data pages in shared memory
  *
- * TODO:
- * currently nothing
- * */
+ * This process is initiating the shared memory, so it has to be started prior
+ * to the vmaccess process.
+ *
+ * @author  Prof. Dr. Wolfgang Fohl, HAW Hamburg (original author)
+ * @author  Moritz Hoewer (Moritz.Hoewer@haw-hamburg.de)
+ * @author  Jesko Treffler (Jesko.Treffler@haw-hamburg.de)
+ * @version 1.0
+ * @date    28.11.2016
+ * @brief   Memory Manager BSP3
+ ******************************************************************
+*/
 
 #include <stdlib.h>
 #include <stdio.h>
 #include "mmanage.h"
 
+/**
+ * @brief root structure for virtual memory
+ */
 static struct vmem_struct *vmem = NULL;
+
+/**
+ * @brief the pagefile
+ */
 static FILE *pagefile = NULL;
+
+/**
+ * @brief the logfile
+ */
 static FILE *logfile = NULL;
+
+/**
+ * @brief the number of the last signal to have been processed
+ */
 static int signal_number = 0;
+
+/**
+ * @brief function pointer for switching page replacement algorithm.
+ */
 static int (*get_frame_to_replace)(void);
 
+/**
+ * @brief program entry point for mmanage
+ *
+ * @param argc command line argument count
+ * @param argv command line arguments
+ *
+ * @return exit code
+ */
 int main(int argc, char** argv) {
     struct sigaction sigact;
 
@@ -95,7 +124,15 @@ int main(int argc, char** argv) {
     vmem_cleanup();
     return 0;
 }
-
+/*
+ * Initializes the pagefile for swapping pages out of memory
+ *
+ * Precondition:
+ * pfname must be a valid filename
+ *
+ * Postcondition:
+ * the File described by pfname will be overwritten.
+ */
 void init_pagefile(const char *pfname) {
     // create / overwrite file
     pagefile = fopen(pfname, "w+b");
@@ -110,6 +147,13 @@ void init_pagefile(const char *pfname) {
     }
 }
 
+/*
+ * Initialize virtual memory.
+ *
+ * Will request and truncate shared memory and then map it to a vmem_struct.
+ * The administration struct (with the semaphore) and page table in vmem_struct
+ * will then be initialized.
+ */
 void vmem_init(void) {
     // request shared memory
     int shm_fd = shm_open(SHMNAME, O_RDWR | O_CREAT | O_TRUNC, 0666);
@@ -147,9 +191,7 @@ void vmem_init(void) {
     } else {
         PDEBUG("semaphore successfully initialized\n")
     }
-    vmem->adm.size = SHMSIZE;
     vmem->adm.mmanage_pid = getpid();
-    vmem->adm.next_alloc_idx = 0;
     vmem->adm.pf_count = 0;
     vmem->adm.req_pageno = 0;
 
@@ -169,7 +211,11 @@ void vmem_init(void) {
     dump();
 
 }
-
+/*
+ * Cleanup virtual memory.
+ *
+ * Will destroy the shared semaphore first.
+ */
 void vmem_cleanup(void) {
     sem_destroy(&(vmem->adm.sema));
     munmap(vmem, SHMSIZE);
@@ -178,11 +224,15 @@ void vmem_cleanup(void) {
     PDEBUG("cleaned up shared memory\n");
 }
 
+/*
+ * performs the necessary actions to handle a pagefault
+ */
 void pagefault() {
     PDEBUG("Pagefault\n");
     vmem->adm.pf_count++;
     int frame_to_replace = get_frame_to_replace();
     int page_to_replace = vmem->pt.framepage[frame_to_replace];
+
     if(vmem->pt.entries[page_to_replace].flags & PTF_DIRTY){
         store_page(page_to_replace, frame_to_replace);
     }
@@ -195,6 +245,7 @@ void pagefault() {
     vmem->pt.entries[page_to_load].frame = frame_to_replace;
     vmem->pt.framepage[frame_to_replace] = page_to_load;
 
+    /* logging */
     struct logevent le;
     le.alloc_frame = frame_to_replace;
     le.g_count = vmem->adm.g_count;
@@ -207,7 +258,18 @@ void pagefault() {
     sem_post(&(vmem->adm.sema));
 }
 
+/*
+ * Stores a page to disk.
+ *
+ * Precondition:
+ * page is between 0 and VMEM_NPAGES
+ * frame is between 0 and VMEM_NFRAMES
+ *
+ * Postcondition:
+ * data stored in frame will be written to disk
+ */
 void store_page(int page, int frame){
+    // TODO: Range checking?
     int *pagedata = vmem->data + frame * VMEM_PAGESIZE;
     int offset = page * VMEM_PAGESIZE;
 
@@ -228,7 +290,21 @@ void store_page(int page, int frame){
     }
 }
 
+/*
+ * Loads a page from disk.
+ *
+ * SIDEEFFECT:
+ * Will change (overwrite) the data associated with frame.
+ *
+ * Precondition:
+ * page is between 0 and VMEM_NPAGES
+ * frame is between 0 and VMEM_NFRAMES
+ *
+ * Postcondition:
+ * data stored in frame will be overwritten
+ */
 void load_page(int page, int frame){
+    // TODO: Range check?
     int *pagedata = vmem->data + frame * VMEM_PAGESIZE;
     int offset = page * VMEM_PAGESIZE;
 
@@ -249,6 +325,9 @@ void load_page(int page, int frame){
     }
 }
 
+/*
+ * prints out the contents of the administration section and the page table.
+ */
 void dump() {
     PDEBUG("Dump\n");
     printf("====================================\n");
@@ -257,7 +336,6 @@ void dump() {
     printf("PID = %d\n", vmem->adm.mmanage_pid);
     printf("Pagefaults = %d\n", vmem->adm.pf_count);
     printf("Requested Page = %d\n", vmem->adm.req_pageno);
-    printf("Next Frame to allocate = %d\n", vmem->adm.next_alloc_idx);
 
     printf("====================================\n");
     printf("            Pagetable\n");
@@ -288,6 +366,9 @@ void dump() {
     }
 }
 
+/*
+ * custom signal handler
+ */
 void sighandler(int signo) {
     signal_number = signo;
     switch (signo) {
@@ -302,11 +383,18 @@ void sighandler(int signo) {
     }
 }
 
+/*
+ * Gets a frame to be replaced according to FIFO principle.
+ */
 int get_frame_fifo(){ /* 545 */
     static int next = -1;
     next = (next + 1) % VMEM_NFRAMES;
     return next;
 }
+
+/*
+ * Gets a frame to be replaced according to LRU principle.
+ */
 int get_frame_lru(){ /*532 */
     int frame = 0;
     int min = vmem->pt.entries[vmem->pt.framepage[0]].last_used;
@@ -321,7 +409,12 @@ int get_frame_lru(){ /*532 */
 
     return frame;
 }
+
+/*
+ * Gets a frame to be replaced according to CLOCK algorithm.
+ */
 int get_frame_clock(){
+    // TODO: Implement CLOCK!
     return 0;
 }
 

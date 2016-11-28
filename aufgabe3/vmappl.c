@@ -1,8 +1,11 @@
-/* Demo application for virtual memory management model
- * File: vmappl.c
- * Prof. Dr. Wolfgang Fohl, HAW Hamburg
- * Winter 2016
- */
+/** ****************************************************************
+ * @file    aufgabe3/vmappl.c
+ * @author  Prof. Dr. Wolfgang Fohl, HAW Hamburg
+ * @version 1.0
+ * @date    15.11.2016
+ * @brief   Demo application for virtual memory management model
+ ******************************************************************
+*/
 
 #include "vmappl.h"
 

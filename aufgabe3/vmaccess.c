@@ -11,9 +11,17 @@
 #include "vmaccess.h"
 #include "vmem.h"
 
+/**
+ * @brief root structure to map virtual memory to
+ */
 static struct vmem_struct *vmem = NULL;
 
-/* Connect to shared memory (key from vmem.h) */
+/*
+ * Connect to virtual memory.
+ *
+ * Will request shared memory and then map it to a vmem_struct.
+ * Assumes that the shared memory already exists and has been initialized.
+ */
 void vmem_init(void){
     // connect to shared memory
     int shm_fd = shm_open(SHMNAME, O_RDWR, 0666);
@@ -35,8 +43,17 @@ void vmem_init(void){
     }
 }
 
-/* Read from "virtual" address */
+/*
+ * Read from "virtual" address
+ *
+ * Precondition:
+ * address must be in process address space (between 0 and VMEM_VIRTMEMSIZE)
+ *
+ * Postcondition:
+ * will return the value stored at address
+ */
 int vmem_read(int address){
+    // TODO: Range check?
     if(vmem == NULL){
         vmem_init();
     }
@@ -66,8 +83,17 @@ int vmem_read(int address){
     return vmem->data[frame_offset + data_offset];
 }
 
-/* Write data to "virtual" address */
+/*
+ * Write data to "virtual" address
+ *
+ * Precondition:
+ * address must be in process address space (between 0 and VMEM_VIRTMEMSIZE)
+ *
+ * Postcondition:
+ * will write the value stored in data to address
+ */
 void vmem_write(int address, int data){
+    // TODO: Range check?
     if(vmem == NULL){
         vmem_init();
     }
@@ -98,6 +124,9 @@ void vmem_write(int address, int data){
     vmem->pt.entries[page].flags |= PTF_DIRTY;
 }
 
+/*
+ * Unmap and unlink shared memory
+ */
 void vmem_cleanup(void){
     // DEBUG!
     kill(vmem->adm.mmanage_pid, SIGUSR2);

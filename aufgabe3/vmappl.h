@@ -1,9 +1,11 @@
-/* Header file for vmappl.c
- * File: vmappl.h
- * Prof. Dr. Wolfgang Fohl, HAW Hamburg
- * Winter 2016
- */
-
+/** ****************************************************************
+ * @file    aufgabe3/vmappl.h
+ * @author  Prof. Dr. Wolfgang Fohl, HAW Hamburg
+ * @version 1.0
+ * @date    15.11.2016
+ * @brief   Header file for vmappl.c
+ ******************************************************************
+*/
 #ifndef VMAPPL_H
 #define VMAPPL_H
 
