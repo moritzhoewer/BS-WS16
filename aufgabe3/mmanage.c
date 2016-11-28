@@ -21,33 +21,22 @@
 #include <stdio.h>
 #include "mmanage.h"
 
-struct vmem_struct *vmem = NULL;
-FILE *pagefile = NULL;
-FILE *logfile = NULL;
-int signal_number = 0; /* Received signal */
-int (*get_frame_to_replace)(void);
-
-void vmem_cleanup(void);
-void dump();
-void pagefault();
-void store_page(int page, int frame);
-void load_page(int page, int frame);
-int get_frame_fifo();
-int get_frame_lru();
-int get_frame_clock();
+static struct vmem_struct *vmem = NULL;
+static FILE *pagefile = NULL;
+static FILE *logfile = NULL;
+static int signal_number = 0;
+static int (*get_frame_to_replace)(void);
 
 int main(int argc, char** argv) {
     struct sigaction sigact;
 
     /* set algorithm for replacement */
+    // TODO: Actually select algorithm
     get_frame_to_replace = get_frame_lru;
 
     /* Init pagefile */
     init_pagefile(MMANAGE_PFNAME);
-    if (!pagefile) {
-        perror("Error creating pagefile");
-        exit(EXIT_FAILURE);
-    }
+
     /* Open logfile */
     logfile = fopen(MMANAGE_LOGFNAME, "w");
     if (!logfile) {
@@ -100,13 +89,13 @@ int main(int argc, char** argv) {
         }
     }
 
+    /* Cleanup */
     fclose(pagefile);
     fclose(logfile);
     vmem_cleanup();
     return 0;
 }
 
-/* Your code goes here... */
 void init_pagefile(const char *pfname) {
     // create / overwrite file
     pagefile = fopen(pfname, "w+b");
@@ -119,7 +108,6 @@ void init_pagefile(const char *pfname) {
     for (int i = 0; i < VMEM_VIRTMEMSIZE; i++) {
         fwrite(&i, 1, 1, pagefile);
     }
-    fseek(pagefile, 0, SEEK_SET);
 }
 
 void vmem_init(void) {
@@ -171,7 +159,7 @@ void vmem_init(void) {
     for (int i = 0; i < VMEM_NPAGES; i++) {
         vmem->pt.entries[i].last_used = 0;
         vmem->pt.entries[i].flags = 0;
-        vmem->pt.entries[i].frame = -1;
+        vmem->pt.entries[i].frame = NO_FRAME;
     }
     for (int i = 0; i < VMEM_NFRAMES; i++) {
         vmem->pt.framepage[i] = 0;

@@ -20,32 +20,27 @@ struct logevent {
     int g_count;
 };
 
-/** Prototypes */
-void usage(void);
+void vmem_init(void);
+
+void vmem_cleanup(void);
+
+void store_page(int page, int frame);
+
+void load_page(int page, int frame);
+
+int get_frame_fifo(void);
+
+int get_frame_lru(void);
+
+int get_frame_clock(void);
 
 void sighandler(int signo);
 
-void vmem_init(void);
+void pagefault(void);
 
-void allocate_page(void);
-
-void fetch_page(int pt_idx);
-
-void update_pt(int frame);
-
-int find_remove_frame(void);
-
-int find_remove_fifo(void);
-
-int find_remove_clock(void);
-
-int find_remove_lru(void);
-
-int search_freeframe(void);
+void dump(void);
 
 void init_pagefile(const char *pfname);
-
-void cleanup(void);
 
 void logger(struct logevent le);
 
@@ -53,19 +48,6 @@ void logger(struct logevent le);
 #define MMANAGE_PFNAME "./pagefile.bin" /**< pagefile name */
 #define MMANAGE_LOGFNAME "./logfile.txt"        /**< logfile name */
 
-#define VMEM_ALGO_FIFO  0
-#define VMEM_ALGO_LRU   1
-#define VMEM_ALGO_CLOCK 2
-
-
-#define SEED_PF 070514        /**< Get reproducable pseudo-random numbers for
-                           init_pagefile */
-
-#define VOID_IDX -1
-
-
-/* Edit to modify algo, or remove line and provide
- * -DVMEM_ALGO ... compiler flag*/
-/* #define VMEM_ALGO VMEM_ALGO_FIFO */
+#define NO_FRAME -1
 
 #endif /* MMANAGE_H */
