@@ -97,6 +97,13 @@ int get_frame_lru(void);
 int get_frame_clock(void);
 
 /**
+ * @brief finds a free frame
+ *
+ * @return index of next free frame or VOID_IDX if no free frame was found
+ */
+int get_free_frame(void);
+
+/**
  * @brief custom signal handler
  *
  * @param[in] signo the signal(number) to be handled
@@ -148,6 +155,6 @@ void logger(struct logevent le);
 /**
  * @brief indicates that page hasn't been initialized
  */
-#define NO_FRAME -1
+#define VOID_IDX -1
 
 #endif /* MMANAGE_H */

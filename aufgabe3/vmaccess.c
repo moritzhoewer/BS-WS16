@@ -53,7 +53,6 @@ void vmem_init(void){
  * will return the value stored at address
  */
 int vmem_read(int address){
-    // TODO: Range check?
     if(vmem == NULL){
         vmem_init();
     }
@@ -62,7 +61,7 @@ int vmem_read(int address){
     vmem->adm.g_count++;
 
     int page = address / VMEM_PAGESIZE;
-    if(page < 0 || page > VMEM_NPAGES){
+    if(page < 0 || page >= VMEM_NPAGES){
         perror("Index out of bounds!");
         vmem_cleanup();
         exit(EXIT_FAILURE);
@@ -77,8 +76,9 @@ int vmem_read(int address){
     int data_offset = address - page * VMEM_PAGESIZE;
     int frame_offset = vmem->pt.entries[page].frame * VMEM_PAGESIZE;
 
-    // update last used on page
+    // update flags on page
     vmem->pt.entries[page].last_used = vmem->adm.g_count;
+    vmem->pt.entries[page].flags |= PTF_USED;
 
     return vmem->data[frame_offset + data_offset];
 }
@@ -93,7 +93,6 @@ int vmem_read(int address){
  * will write the value stored in data to address
  */
 void vmem_write(int address, int data){
-    // TODO: Range check?
     if(vmem == NULL){
         vmem_init();
     }
@@ -102,7 +101,7 @@ void vmem_write(int address, int data){
     vmem->adm.g_count++;
 
     int page = address / VMEM_PAGESIZE;
-    if(page < 0 || page > VMEM_NPAGES){
+    if(page < 0 || page >= VMEM_NPAGES){
         perror("Index out of bounds!");
         vmem_cleanup();
         exit(EXIT_FAILURE);
@@ -119,9 +118,10 @@ void vmem_write(int address, int data){
 
     vmem->data[frame_offset + data_offset] = data;
 
-    // update last used on page and flag as dirty
+    // update flags
     vmem->pt.entries[page].last_used = vmem->adm.g_count;
     vmem->pt.entries[page].flags |= PTF_DIRTY;
+    vmem->pt.entries[page].flags |= PTF_USED;
 }
 
 /*

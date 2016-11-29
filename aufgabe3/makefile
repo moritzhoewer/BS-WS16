@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -pthread -Wall -DDEBUG_MESSAGES
+CFLAGS = -g -std=gnu99 -pthread -Wall -DDEBUG_MESSAGES
 LDFLAGS = -g -lrt -lpthread
 
 SRC = mmanage.c vmappl.c vmaccess.c
