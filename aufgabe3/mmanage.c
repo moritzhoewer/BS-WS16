@@ -69,8 +69,11 @@ int main(int argc, char** argv) {
 		get_frame_to_replace = get_frame_lru;
 	} else if(strcmp(argv[1], "CLOCK") == 0){
 		get_frame_to_replace = get_frame_clock;
-	} else {
+	} else if(strcmp(argv[1], "FIFO") == 0){
 		get_frame_to_replace = get_frame_fifo;
+	} else {
+		printf("Invalid algorithm! Please select (FIFO, LRU, CLOCK)!\n");
+		return EXIT_FAILURE;
 	}
 
 	/* Init pagefile */
@@ -249,7 +252,7 @@ void pagefault() {
 		frame_to_replace = get_frame_to_replace();
 		int page_to_replace = vmem->pt.framepage[frame_to_replace];
 
-		if(page_to_replace != -1 && (vmem->pt.entries[page_to_replace].flags & PTF_DIRTY)){
+		if((page_to_replace != VOID_IDX) && (vmem->pt.entries[page_to_replace].flags & PTF_DIRTY)){
 			store_page(page_to_replace, frame_to_replace);
 		}
 		vmem->pt.entries[page_to_replace].flags = 0; /* not present, not dirty, not used */
@@ -442,8 +445,9 @@ int get_frame_lru(){ /* 531 */
 /*
  * Gets a frame to be replaced according to CLOCK algorithm.
  */
-int get_frame_clock(){ /* 543 */
-	static int current = 0;
+int get_frame_clock(){ /* 536 */
+	static int current =  -1;
+	current = (current + 1) % VMEM_NFRAMES;
 	while(vmem->pt.entries[vmem->pt.framepage[current]].flags & PTF_USED){
 		vmem->pt.entries[vmem->pt.framepage[current]].flags &= ~PTF_USED;
 		current = (current + 1) % VMEM_NFRAMES;

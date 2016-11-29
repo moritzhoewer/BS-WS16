@@ -134,7 +134,6 @@ void vmem_cleanup(void){
 
     munmap(vmem, SHMSIZE);
     vmem = NULL;
-    shm_unlink(SHMNAME);
-    PDEBUG("cleaned up shared memory\n");
+    PDEBUG("disconnected shared memory\n");
 
 }
