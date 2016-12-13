@@ -37,22 +37,22 @@ ssize_t timer_read(struct file *filp, char __user *buf, size_t count,
 
 	switch (dev->state) {
 	case READY:
-		transferred = MIN(16, count); // TODO: Magic Numbers
-		if (copy_to_user(buf, "Timer is ready.\n", transferred)) {
+		transferred = MIN(strlen(READY_MSG), count);
+		if (copy_to_user(buf, READY_MSG, transferred)) {
 			printk(KERN_WARNING "Cannot send data to user!\n");
 			return -EFAULT;
 		}
 		break;
 	case LOAD:
-		transferred = MIN(17, count); // TODO: Magic Numbers
-		if (copy_to_user(buf, "Timer is loaded.\n", transferred)) {
+		transferred = MIN(strlen(LOADED_MSG), count);
+		if (copy_to_user(buf, LOADED_MSG, transferred)) {
 			printk(KERN_WARNING "Cannot send data to user!\n");
 			return -EFAULT;
 		}
 		break;
 	case PAUSE:
-		transferred = MIN(17, count); // TODO: Magic Numbers
-		if (copy_to_user(buf, "Timer is paused.\n", transferred)) {
+		transferred = MIN(strlen(PAUSED_MSG), count);
+		if (copy_to_user(buf, PAUSED_MSG, transferred)) {
 			printk(KERN_WARNING "Cannot send data to user!\n");
 			return -EFAULT;
 		}
@@ -63,10 +63,8 @@ ssize_t timer_read(struct file *filp, char __user *buf, size_t count,
 			if (jif < dev->jiffies_start) {
 				printk(KERN_WARNING "Whoops, timer encountered a wrap around when reading\n");
 
-				transferred = MIN(46, count); // TODO: Magic Numbers
-				if (copy_to_user(buf,
-						"Sorry, there was a wrap around - resetting...\n",
-						transferred)) {
+				transferred = MIN(strlen(WRAP_AROUND_WARNING), count);
+				if (copy_to_user(buf, WRAP_AROUND_WARNING, transferred)) {
 					printk(KERN_WARNING "Cannot send data to user!\n");
 					return -EFAULT;
 				}
@@ -86,8 +84,8 @@ ssize_t timer_read(struct file *filp, char __user *buf, size_t count,
 			u64 jif = get_jiffies_64();
 			if (jif > (dev->jiffies_start + dev->jiffies_pause_total)) {
 				// done counting down
-				transferred = MIN(2, count); // TODO: Magic Numbers
-				if (copy_to_user(buf,"0\n",	transferred)) {
+				transferred = MIN(strlen(COUNTDOWN_FINISHED_MSG), count);
+				if (copy_to_user(buf,COUNTDOWN_FINISHED_MSG,	transferred)) {
 					printk(KERN_WARNING "Cannot send data to user!\n");
 					return -EFAULT;
 				}
@@ -105,7 +103,7 @@ ssize_t timer_read(struct file *filp, char __user *buf, size_t count,
 		}
 		break;
 	}
-	*f_pos = 10; // TODO: Magic Numbers
+	*f_pos = transferred;
 	return transferred;
 }
 

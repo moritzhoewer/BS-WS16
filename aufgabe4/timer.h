@@ -44,12 +44,8 @@ struct timer_device {
 #undef PDEBUGG
 #define PDEBUGG(fmt, args...) /* nothing: it's a placeholder */
 
-/*inline int min(int a, int b) {
- return (b < a) ? b : a;
- }*/
 
 #define MIN(a, b) (b) < (a) ? (b) : (a)
-
 
 
 #define MINOR_START 0
@@ -58,5 +54,12 @@ struct timer_device {
 
 //scaling stuff
 #define S_TIMESCALE HZ
-#define MS_TIMESCALE S_TIMESCALE/1000
+#define MS_TIMESCALE S_TIMESCALE / 1000
 #define JIFFIES_TIMESCALE 1
+
+// messages
+#define READY_MSG "Timer is ready.\n"
+#define LOADED_MSG "Timer is loaded.\n"
+#define PAUSED_MSG "Timer is paused.\n"
+#define COUNTDOWN_FINISHED_MSG "0\n"
+#define WRAP_AROUND_WARNING "Sorry, there was a wrap around - resetting...\n"
